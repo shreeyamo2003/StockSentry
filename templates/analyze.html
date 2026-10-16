@@ -1,0 +1,105 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Analysis | StockSentry</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='analyze.css') }}">
+</head>
+<body>
+    <header class="analyze-header">
+        <a href="/" class="analyze-brand">StockSentry</a>
+        <a href="/" class="back-link">← Back to home</a>
+    </header>
+
+    <main class="portfolio" id="portfolio">
+        <div class="portfolio-heading">
+            <p class="portfolio-eyebrow">YOUR MONEY, IN PERSPECTIVE</p>
+            <h1>Your portfolio, at a glance.</h1>
+            <p class="portfolio-intro">
+                Track your investments and monitor your target prices.
+            </p>
+        </div>
+
+        <div class="portfolio-summary">
+            <article class="summary-card summary-main">
+                <p>Current portfolio value</p>
+                <h2 id="portfolio-current">₹0.00</h2>
+                <p id="portfolio-return">0.00% return</p>
+            </article>
+
+            <article class="summary-card">
+                <p>Total invested</p>
+                <h2 id="portfolio-invested">₹0.00</h2>
+            </article>
+
+            <article class="summary-card summary-performance">
+                <p>Total profit / loss</p>
+                <h2 id="portfolio-pl">₹0.00</h2>
+            </article>
+
+            <article class="summary-card">
+                <p>Total holdings</p>
+                <h2 id="portfolio-count">0</h2>
+                <p id="portfolio-priced">0 with prices available</p>
+            </article>
+        </div>
+
+        
+<div class="holdings-toolbar">
+    <div>
+        <p class="portfolio-eyebrow">YOUR WATCHLIST</p>
+        <h2>Holdings that matter.</h2>
+    </div>
+
+    <div class="portfolio-actions">
+        <button id="add-holding" class="btn btn-secondary">
+            + Add a holding
+        </button>
+        <button id="refresh-portfolio" class="btn btn-primary">
+            ↻ Refresh prices
+        </button>
+    </div>
+</div>
+
+
+        <p id="portfolio-message" class="portfolio-message">
+            Your saved holdings will appear here.
+        </p>
+
+        <p id="holdings-count" class="portfolio-message"></p>
+
+<div class="holdings-grid" id="holdings-grid"></div>
+
+        <p class="portfolio-disclaimer">
+            Market prices may be delayed. StockSentry does not place trades.
+        </p>
+    </main>
+
+<footer class="portfolio-footer">
+    <div class="portfolio-footer-inner">
+        <a href="/" class="portfolio-footer-brand">StockSentry<span>.</span></a>
+
+        <p class="portfolio-footer-tagline">
+            A clearer view of every investment.
+        </p>
+
+        <div class="portfolio-footer-bottom">
+            <span>© 2026 StockSentry</span>
+        </div>
+
+        <p class="portfolio-footer-note">
+            Market prices may be delayed. For personal tracking only.
+            StockSentry does not execute trades or provide financial advice.
+        </p>
+    </div>
+</footer>
+
+    <script src="{{ url_for('static', filename='portfolio.js') }}"></script>
+</body>
+</html>
