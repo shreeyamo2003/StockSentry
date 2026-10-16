@@ -59,6 +59,4 @@ StockSentry/
 
 Price data comes from an unofficial source and may be delayed or incomplete. Alerts only run while the application is open and your computer is awake, and they cannot guarantee notification at the exact moment a price crosses a target. StockSentry is a personal monitoring and educational tool, not financial advice.
 
-## License
-
-Add a license of your choice here, for example MIT.
+By Shreeya
