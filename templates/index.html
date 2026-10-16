@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>StockSentry | Track your stocks and targets</title>
+  <meta name="description" content="StockSentry is a personal stock tracker for NSE and BSE holdings. Set a target range and get alerted when a price reaches it.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <!-- NAV -->
+  <header class="nav">
+    <a class="brand" href="#top" aria-label="StockSentry home">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+        <rect x="2" y="11" width="28" height="10" rx="2" class="bm-band"/>
+        <path d="M2 24 L11 16 L17 20 L30 6" class="bm-line"/>
+      </svg>
+      <span>StockSentry</span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#about">About</a>
+      <a href="#uses">What it does</a>
+      <a href="#how">How it works</a>
+      <button class="btn btn-small" data-open-modal>Track a stock</button>
+    </nav>
+  </header>
+
+  <main id="top">
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-copy">
+        <h1>Your price target,<br>watched for you.</h1>
+        <p class="lead">StockSentry tracks your NSE and BSE holdings, shows how each one is doing, and tells you the moment a price enters the range you picked. It runs on your own computer and never touches a broker account.</p>
+        <div class="hero-actions">
+          <button class="btn btn-primary" data-open-modal>Analyze / track your stocks</button>
+          <a class="btn-link" href="#how">See how it works</a>
+        </div>
+        <p class="hero-note">No logins. No trades. Your data stays on your laptop.</p>
+      </div>
+
+      <!-- signature element: a price line moving through a target band -->
+      <div class="hero-visual" aria-hidden="true">
+        <div class="panel">
+          <div class="panel-top">
+            <span class="panel-sym">Sample stock</span>
+            <span class="panel-tag"><i></i>Inside target range</span>
+          </div>
+          <svg class="chart" viewBox="0 0 520 300" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="fadeLine" x1="0" x2="1">
+                <stop offset="0" stop-color="#E9D9C3" stop-opacity=".25"/>
+                <stop offset="1" stop-color="#F6EEE1"/>
+              </linearGradient>
+            </defs>
+            <g class="grid">
+              <line x1="0" y1="60" x2="520" y2="60"/>
+              <line x1="0" y1="120" x2="520" y2="120"/>
+              <line x1="0" y1="180" x2="520" y2="180"/>
+              <line x1="0" y1="240" x2="520" y2="240"/>
+            </g>
+            <rect class="band" x="0" y="82" width="520" height="70"/>
+            <line class="band-edge" x1="0" y1="82" x2="520" y2="82"/>
+            <line class="band-edge" x1="0" y1="152" x2="520" y2="152"/>
+            <path class="price-line" d="M0 250 C40 244 60 214 100 222 S160 258 200 226 S258 176 296 196 S352 218 388 170 S440 118 520 112"/>
+            <g class="pulse" transform="translate(520 112)">
+              <circle r="14" class="pulse-ring"/>
+              <circle r="6" class="pulse-dot"/>
+            </g>
+          </svg>
+          <div class="band-label"><span>Target range</span></div>
+        </div>
+        <div class="chip chip-a"><small>Invested</small><b>₹4,000</b></div>
+        <div class="chip chip-b"><small>Return</small><b>+25%</b></div>
+      </div>
+    </section>
+
+    <!-- TICKER -->
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker-track">
+        <span>RELIANCE.NS</span><span>TCS.NS</span><span>INFY.NS</span><span>HDFCBANK.NS</span><span>ITC.NS</span><span>500325.BO</span><span>TATAMOTORS.NS</span><span>SBIN.NS</span><span>WIPRO.NS</span><span>532540.BO</span>
+        <span>RELIANCE.NS</span><span>TCS.NS</span><span>INFY.NS</span><span>HDFCBANK.NS</span><span>ITC.NS</span><span>500325.BO</span><span>TATAMOTORS.NS</span><span>SBIN.NS</span><span>WIPRO.NS</span><span>532540.BO</span>
+      </div>
+    </div>
+
+    <!-- ABOUT -->
+    <section class="about" id="about">
+      <h2>Checking prices all day is a job. Let it be the app's job.</h2>
+      <div class="about-text">
+        <p>If you hold shares in several companies, each one has its own buying price, quantity and the price at which you would like to sell. Keeping all of that in your head, or in a spreadsheet you have to refresh, means targets get missed.</p>
+        <p>StockSentry keeps every holding in one place. You enter what you own and the range you are hoping for. It does the arithmetic, watches the price, and raises a flag when your range is reached. What you do next is entirely your call.</p>
+      </div>
+    </section>
+
+    <!-- USES -->
+    <section class="uses" id="uses">
+      <h2>What you can use it for</h2>
+      <div class="uses-grid">
+        <article class="use use-wide">
+          <h3>See how every holding is doing</h3>
+          <p>Invested amount, current value, profit or loss and percentage return, calculated for each stock and for the whole portfolio.</p>
+        </article>
+        <article class="use use-blue">
+          <h3>Set a range, not just a number</h3>
+          <p>Choose a lowest and highest target price for each stock.</p>
+        </article>
+        <article class="use">
+          <h3>Get told when it matters</h3>
+          <p>A dashboard alert appears when a price enters your range, with an optional email.</p>
+        </article>
+        <article class="use use-cream">
+          <h3>Know when a price is old</h3>
+          <p>If a fresh price cannot be fetched, the last one is kept and clearly marked as stale.</p>
+        </article>
+        <article class="use use-wide use-wine">
+          <h3>Keep your data to yourself</h3>
+          <p>Holdings are stored in a database file on your own computer. There is no broker login and no way to place an order from the app.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- HOW -->
+    <section class="how" id="how">
+      <h2>How it works</h2>
+      <ol class="steps">
+        <li>
+          <h3>Add a holding</h3>
+          <p>Enter the company, symbol, exchange, quantity and the price you paid.</p>
+        </li>
+        <li>
+          <h3>Pick your target range</h3>
+          <p>Tell StockSentry the lowest and highest price you would be happy to see.</p>
+        </li>
+        <li>
+          <h3>Let it watch</h3>
+          <p>Prices are checked at regular intervals while the app is running.</p>
+        </li>
+        <li>
+          <h3>Decide for yourself</h3>
+          <p>When the range is reached you get an alert. Any buying or selling is done by you, elsewhere.</p>
+        </li>
+      </ol>
+      <div class="how-cta">
+        <button class="btn btn-primary" data-open-modal>Analyze / track your stocks</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="brand brand-foot">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+        <rect x="2" y="11" width="28" height="10" rx="2" class="bm-band"/>
+        <path d="M2 24 L11 16 L17 20 L30 6" class="bm-line"/>
+      </svg>
+      <span>StockSentry</span>
+    </div>
+    <p>A personal monitoring and learning tool. It does not give financial advice, and prices may be delayed or incomplete.</p>
+  </footer>
+
+  <!-- MODAL -->
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="modal-backdrop" data-close-modal></div>
+    <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <button class="modal-close" data-close-modal aria-label="Close">
+        <svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg>
+      </button>
+
+      <!-- left: live summary -->
+      <aside class="modal-side">
+        <h2 id="modal-title">Add a stock to track</h2>
+        <p class="side-lead">Fill in what you hold and where you want to see the price. The summary updates as you type.</p>
+
+        <div class="live">
+          <div class="live-row"><span>Ticker used for prices</span><b id="lv-ticker">-</b></div>
+          <div class="live-row"><span>Total invested</span><b id="lv-invested">₹0</b></div>
+          <div class="live-row"><span>Value at lowest target</span><b id="lv-low">-</b></div>
+          <div class="live-row"><span>Value at highest target</span><b id="lv-high">-</b></div>
+        </div>
+
+        <div class="scale" id="scale" aria-hidden="true">
+          <div class="scale-track">
+            <div class="scale-band" id="scale-band"></div>
+            <div class="scale-buy" id="scale-buy"><span>Bought</span></div>
+          </div>
+          <p class="scale-empty" id="scale-empty">Enter your buy price and targets to see where they sit.</p>
+        </div>
+
+        <p class="side-foot">Nothing is sent anywhere. This is a local tool.</p>
+      </aside>
+
+      <!-- right: form -->
+      <form class="modal-form" id="stock-form" novalidate>
+        <div class="field span-2">
+          <label for="company">Company name</label>
+          <input id="company" name="company" type="text" placeholder="Reliance Industries" autocomplete="off" required>
+          <small class="err" data-err-for="company"></small>
+        </div>
+
+        <div class="field">
+          <label for="symbol">Stock symbol</label>
+          <input id="symbol" name="symbol" type="text" placeholder="RELIANCE" autocomplete="off" required>
+          <small class="hint">For BSE, use the scrip code, for example 500325.</small>
+          <small class="err" data-err-for="symbol"></small>
+        </div>
+
+        <div class="field">
+          <span class="label" id="ex-label">Exchange</span>
+          <div class="segmented" role="radiogroup" aria-labelledby="ex-label">
+            <input type="radio" id="ex-nse" name="exchange" value="NSE" checked>
+            <label for="ex-nse">NSE</label>
+            <input type="radio" id="ex-bse" name="exchange" value="BSE">
+            <label for="ex-bse">BSE</label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="quantity">Quantity held</label>
+          <input id="quantity" name="quantity" type="number" min="1" step="1" inputmode="numeric" placeholder="20" required>
+          <small class="err" data-err-for="quantity"></small>
+        </div>
+
+        <div class="field">
+          <label for="buyPrice">Buy price per share</label>
+          <div class="money"><span>₹</span><input id="buyPrice" name="buyPrice" type="number" min="0" step="0.01" inputmode="decimal" placeholder="200.00" required></div>
+          <small class="err" data-err-for="buyPrice"></small>
+        </div>
+
+        <div class="field span-2">
+          <label for="buyDate">Purchase date <em>(optional)</em></label>
+          <input id="buyDate" name="buyDate" type="date">
+        </div>
+
+        <div class="field">
+          <label for="targetMin">Lowest target price</label>
+          <div class="money"><span>₹</span><input id="targetMin" name="targetMin" type="number" min="0" step="0.01" inputmode="decimal" placeholder="240.00" required></div>
+          <small class="err" data-err-for="targetMin"></small>
+        </div>
+
+        <div class="field">
+          <label for="targetMax">Highest target price</label>
+          <div class="money"><span>₹</span><input id="targetMax" name="targetMax" type="number" min="0" step="0.01" inputmode="decimal" placeholder="280.00" required></div>
+          <small class="err" data-err-for="targetMax"></small>
+        </div>
+
+        <div class="field span-2">
+          <div class="range-head">
+            <label for="nearPct">Warn me when the price is within</label>
+            <output id="nearOut">5%</output>
+          </div>
+          <input id="nearPct" name="nearPct" type="range" min="1" max="20" step="1" value="5">
+          <small class="hint">of the target range, so you get a heads-up before it is reached.</small>
+        </div>
+
+        <div class="field span-2">
+          <label class="switch">
+            <input type="checkbox" id="emailOn" name="emailOn">
+            <span class="switch-ui" aria-hidden="true"></span>
+            <span class="switch-text">Also email me when a target is reached</span>
+          </label>
+          <div class="email-wrap" id="emailWrap" hidden>
+            <label for="email" class="sr-only">Email address</label>
+            <input id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email">
+            <small class="err" data-err-for="email"></small>
+          </div>
+        </div>
+
+        <div class="form-actions span-2">
+          <button type="button" class="btn btn-ghost" data-close-modal>Cancel</button>
+          <button type="submit" class="btn btn-primary">Analyze this stock</button>
+        </div>
+      </form>
+
+      <!-- success state -->
+      <div class="modal-done" id="done" hidden>
+        <div class="done-mark"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+        <h3 id="done-title">Stock added</h3>
+        <p id="done-text"></p>
+        <div class="done-actions">
+          <button class="btn btn-ghost" id="add-another">Add another</button>
+          <button class="btn btn-primary" data-close-modal>Done</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
