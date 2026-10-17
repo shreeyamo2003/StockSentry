@@ -12,10 +12,21 @@
           href="{{ url_for('static', filename='analyze.css') }}">
 </head>
 <body>
-    <header class="analyze-header">
-        <a href="/" class="analyze-brand">StockSentry</a>
-        <a href="/" class="back-link">← Back to home</a>
-    </header>
+
+   
+<header class="analyze-header">
+    <a href="/" class="analyze-brand">StockSentry</a>
+
+    <nav class="analyze-nav">
+        <a href="/" class="back-link">Home</a>
+
+        <form action="/logout" method="POST">
+            <button type="submit" class="btn btn-small">Sign out</button>
+        </form>
+    </nav>
+</header>
+
+    
 
     <main class="portfolio" id="portfolio">
         <div class="portfolio-heading">
@@ -75,6 +86,43 @@
         </p>
 
         <p id="holdings-count" class="portfolio-message"></p>
+
+
+<section class="performance-section">
+    <div class="performance-heading">
+        <div>
+            <p class="portfolio-eyebrow">PORTFOLIO PERFORMANCE</p>
+            <h2>Your portfolio, over time.</h2>
+            <p>Track how your investments have changed.</p>
+        </div>
+
+        <div class="performance-filters">
+            <button type="button" class="period-btn active" data-period="1M">1M</button>
+<button type="button" class="period-btn" data-period="3M">3M</button>
+<button type="button" class="period-btn" data-period="6M">6M</button>
+<button type="button" class="period-btn" data-period="1Y">1Y</button>
+        </div>
+    </div>
+
+    <div class="performance-summary">
+        <div>
+            <p>Current portfolio value</p>
+            <h3 id="performance-value">Loading...</h3>
+        </div>
+        <div>
+            <p>Overall profit / loss</p>
+            <h3 id="performance-profit">Loading...</h3>
+        </div>
+    </div>
+
+    <div class="performance-chart-container">
+        <canvas id="performance-chart"></canvas>
+    </div>
+
+    <p class="performance-note" id="performance-note">
+        Portfolio history will appear here once historical data is available.
+    </p>
+</section>
 
         
 <section class="charts-section">
@@ -153,6 +201,22 @@
         <p class="portfolio-disclaimer">
             Market prices may be delayed. StockSentry does not place trades.
         </p>
+
+        <section class="market-ticker-section" aria-label="Stock market watchlist">
+    <div class="market-ticker-heading">
+        <span class="market-live-dot"></span>
+        <span>MARKET WATCH</span>
+        <span class="market-ticker-hint">Swipe to explore →</span>
+    </div>
+
+    <div class="market-ticker" id="marketTicker">
+        <div class="market-ticker-track" id="marketTickerTrack">
+            <div class="market-ticker-loading">
+                Loading market prices...
+            </div>
+        </div>
+    </div>
+</section>
     </main>
 
 <footer class="portfolio-footer">

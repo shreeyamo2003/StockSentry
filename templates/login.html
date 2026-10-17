@@ -1,0 +1,77 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | StockSentry</title>
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            background: #f8f3e9;
+            font-family: Arial, sans-serif;
+            color: #45202b;
+        }
+        .card {
+            width: min(360px, calc(100% - 56px));
+            padding: 28px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px #45202b14;
+        }
+        h1 { margin-top: 0; }
+        p { color: #75656a; }
+        label { display: block; margin-top: 16px; }
+        input {
+            box-sizing: border-box;
+            width: 100%;
+            margin-top: 7px;
+            padding: 12px;
+            border: 1px solid #d8cbd0;
+            border-radius: 8px;
+        }
+        button {
+            width: 100%;
+            margin-top: 22px;
+            padding: 12px;
+            border: 0;
+            border-radius: 8px;
+            background: #702d43;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .message { color: #a12626; }
+        a { color: #702d43; }
+    </style>
+</head>
+<body>
+    <main class="card">
+        <h1>Welcome back</h1>
+        <p>Log in to view your portfolio.</p>
+
+        {% with messages = get_flashed_messages() %}
+            {% for message in messages %}
+                <p class="message">{{ message }}</p>
+            {% endfor %}
+        {% endwith %}
+
+        <form method="POST">
+            <label for="username">Username</label>
+            <input id="username" name="username"
+                   required autocomplete="username">
+
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password"
+                   required autocomplete="current-password">
+
+            <button type="submit">Log in</button>
+        </form>
+
+        <p>New to StockSentry? <a href="/register">Create an account</a></p>
+    </main>
+</body>
+</html>

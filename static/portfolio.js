@@ -632,3 +632,218 @@ function checkTargetNotifications(holdings) {
         localStorage.setItem(storageKey, status);
     });
 }
+async function loadMarketTicker() {
+    const track = document.getElementById("marketTickerTrack");
+    if (!track) return;
+
+    try {
+        const response = await fetch("/api/market-watch");
+
+        if (!response.ok) {
+            throw new Error("Unable to fetch market prices");
+        }
+
+        const stocks = await response.json();
+
+        if (!stocks.length) {
+            track.innerHTML =
+                '<div class="market-ticker-loading">Market prices are unavailable right now.</div>';
+            return;
+        }
+
+        track.innerHTML = stocks.map(stock => {
+            const positive = stock.change >= 0;
+            const sign = positive ? "+" : "";
+
+            return `
+                <article class="market-ticker-card">
+                    <div class="market-ticker-symbol">${stock.symbol}</div>
+                    <div class="market-ticker-name">${stock.name}</div>
+                    <div class="market-ticker-price">
+                        ₹${Number(stock.price).toLocaleString("en-IN", {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        })}
+                    </div>
+                    <div class="market-ticker-change ${positive ? "positive" : "negative"}">
+                        ${sign}${Number(stock.change_pct).toFixed(2)}%
+                    </div>
+                </article>
+            `;
+        }).join("");
+
+    } catch (error) {
+        console.error("Market ticker error:", error);
+        track.innerHTML =
+            '<div class="market-ticker-loading">Could not load market prices. Please refresh.</div>';
+    }
+}
+
+loadMarketTicker();
+
+let performanceChart = null;
+
+async function loadPerformanceChart(period = "1M") {
+    const canvas = document.getElementById("performance-chart");
+    const note = document.getElementById("performance-note");
+
+    if (!canvas || typeof Chart === "undefined") return;
+
+    if (note) {
+        note.textContent = "Loading historical performance...";
+    }
+
+    try {
+        const response = await fetch(
+            `/api/performance?period=${encodeURIComponent(period)}`
+        );
+
+        if (!response.ok) {
+            throw new Error(`Request failed: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        const valueElement = document.getElementById("performance-value");
+        const profitElement = document.getElementById("performance-profit");
+
+        if (!data.values || data.values.length === 0) {
+            if (performanceChart) {
+                performanceChart.destroy();
+                performanceChart = null;
+            }
+
+            if (valueElement) valueElement.textContent = "₹—";
+            if (profitElement) profitElement.textContent = "—";
+            if (note) {
+                note.textContent =
+                    data.message || "No historical data available yet.";
+            }
+            return;
+        }
+
+        const latest = data.values[data.values.length - 1];
+        const change = Number(data.change || 0);
+        const changePct = Number(data.change_pct || 0);
+
+        if (valueElement) {
+            valueElement.textContent = latest.toLocaleString("en-IN", {
+                style: "currency",
+                currency: "INR",
+                maximumFractionDigits: 2
+            });
+        }
+
+        if (profitElement) {
+            const sign = change > 0 ? "+" : "";
+            profitElement.textContent =
+                `${sign}${change.toLocaleString("en-IN", {
+                    style: "currency",
+                    currency: "INR",
+                    maximumFractionDigits: 2
+                })} (${sign}${changePct.toFixed(2)}%)`;
+
+            profitElement.style.color =
+                change >= 0 ? "#20805b" : "#bd3847";
+        }
+
+        const context = canvas.getContext("2d");
+
+        if (performanceChart) {
+            performanceChart.destroy();
+        }
+
+        performanceChart = new Chart(context, {
+            type: "line",
+            data: {
+                labels: data.labels,
+                datasets: [{
+                    label: "Portfolio value",
+                    data: data.values,
+                    borderColor: "#641729",
+                    backgroundColor: "rgba(100, 23, 41, 0.10)",
+                    borderWidth: 2.5,
+                    fill: true,
+                    tension: 0.3,
+                    pointRadius: data.values.length > 40 ? 0 : 2,
+                    pointHoverRadius: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    intersect: false,
+                    mode: "index"
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                return context.parsed.y.toLocaleString(
+                                    "en-IN",
+                                    {
+                                        style: "currency",
+                                        currency: "INR",
+                                        maximumFractionDigits: 2
+                                    }
+                                );
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            maxTicksLimit: 7
+                        }
+                    },
+                    y: {
+                        beginAtZero: false,
+                        ticks: {
+                            callback: function (value) {
+                                return "₹" +
+                                    Number(value).toLocaleString("en-IN");
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        if (note) {
+            note.textContent = data.message || "Historical portfolio values";
+            if (data.unavailable && data.unavailable.length) {
+                note.textContent +=
+                    ` Missing data for: ${data.unavailable.join(", ")}.`;
+            }
+        }
+
+    } catch (error) {
+        console.error("Performance chart error:", error);
+
+        if (note) {
+            note.textContent =
+                "Could not load performance data. Check the server logs.";
+        }
+    }
+}
+
+document.querySelectorAll(".period-btn").forEach(button => {
+    button.addEventListener("click", () => {
+        document.querySelectorAll(".period-btn").forEach(item => {
+            item.classList.remove("active");
+        });
+
+        button.classList.add("active");
+        loadPerformanceChart(button.dataset.period);
+    });
+});
+
+loadPerformanceChart("1M");
