@@ -15,6 +15,15 @@ def get_connection():
 def init_db():
     with get_connection() as conn:
         conn.execute("""
+            CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                username TEXT NOT NULL UNIQUE,
+                password_hash TEXT NOT NULL,
+                created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+
+        conn.execute("""
             CREATE TABLE IF NOT EXISTS stocks (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 company_name TEXT NOT NULL,
@@ -38,6 +47,18 @@ def init_db():
             )
         """)
 
+        # Add ownership to an existing stocks table without deleting its data.
+        stock_columns = {
+            row["name"]
+            for row in conn.execute("PRAGMA table_info(stocks)").fetchall()
+        }
+
+        if "user_id" not in stock_columns:
+            conn.execute("""
+                ALTER TABLE stocks
+                ADD COLUMN user_id INTEGER REFERENCES users(id)
+            """)
+
         conn.execute("""
             CREATE TABLE IF NOT EXISTS alerts (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -54,6 +75,11 @@ def init_db():
         conn.execute("""
             CREATE INDEX IF NOT EXISTS idx_alerts_stock_id
             ON alerts(stock_id)
+        """)
+
+        conn.execute("""
+            CREATE INDEX IF NOT EXISTS idx_stocks_user_id
+            ON stocks(user_id)
         """)
 
 

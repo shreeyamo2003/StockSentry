@@ -1469,3 +1469,261 @@ body {
     background: #EEE9E8;
     color: #62585A;
 }
+
+.analyze-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.analyze-nav {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.analyze-nav form {
+    margin: 0;
+}
+
+.analyze-nav .btn {
+    white-space: nowrap;
+}
+
+.performance-section {
+    margin: 28px 0;
+    padding: 24px;
+    background: #fffaf4;
+    border: 1px solid #eadbd5;
+    border-radius: 16px;
+    box-shadow: 0 5px 18px rgba(69, 32, 43, 0.05);
+}
+
+.performance-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.performance-heading h2 {
+    margin: 5px 0;
+    color: #641729;
+}
+
+.performance-heading p:not(.portfolio-eyebrow) {
+    margin-top: 6px;
+    color: #88747a;
+    font-size: 13px;
+}
+
+.performance-filters {
+    display: flex;
+    gap: 5px;
+    padding: 4px;
+    background: #f1e7df;
+    border-radius: 9px;
+}
+
+.period-btn {
+    padding: 7px 11px;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: #641729;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.period-btn.active {
+    background: #641729;
+    color: white;
+}
+
+.performance-summary {
+    display: flex;
+    gap: 48px;
+    flex-wrap: wrap;
+    margin: 24px 0 12px;
+}
+
+.performance-summary p {
+    margin: 0 0 7px;
+    color: #88747a;
+    font-size: 12px;
+}
+
+.performance-summary h3 {
+    margin: 0;
+    color: #641729;
+    font-size: 23px;
+}
+
+.performance-chart-container {
+    position: relative;
+    width: 100%;
+    height: 280px;
+}
+
+.performance-note {
+    margin: 12px 0 0;
+    color: #88747a;
+    font-size: 11px;
+}
+
+@media (max-width: 600px) {
+    .performance-section {
+        padding: 16px;
+    }
+
+    .performance-summary {
+        gap: 22px;
+    }
+
+    .performance-chart-container {
+        height: 220px;
+    }
+}
+
+.market-ticker-section {
+    margin: 12px 0 26px;
+    padding: 14px 0;
+    border-top: 1px solid #e8d7d0;
+    border-bottom: 1px solid #e8d7d0;
+}
+
+.market-ticker-heading {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 2px 12px;
+    color: #641729;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+}
+
+.market-live-dot {
+    width: 7px;
+    height: 7px;
+    flex-shrink: 0;
+    background: #2b8a62;
+    border-radius: 50%;
+}
+
+.market-ticker-hint {
+    margin-left: auto;
+    color: #88747a;
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0;
+}
+
+.market-ticker {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: #c8aab0 transparent;
+    -webkit-overflow-scrolling: touch;
+}
+
+.market-ticker-track {
+    display: flex;
+    align-items: stretch;
+    gap: 12px;
+    width: max-content;
+    padding: 0 2px 8px;
+}
+
+.market-ticker-card {
+    min-width: 165px;
+    padding: 12px 15px;
+    background: #fffaf4;
+    border: 1px solid #eadbd5;
+    border-radius: 10px;
+}
+
+.market-ticker-symbol {
+    color: #641729;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.market-ticker-name {
+    margin-top: 3px;
+    color: #88747a;
+    font-size: 10px;
+}
+
+.market-ticker-price {
+    margin-top: 10px;
+    color: #321720;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.market-ticker-change {
+    margin-top: 5px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.market-ticker-change.positive {
+    color: #20805b;
+}
+
+.market-ticker-change.negative {
+    color: #bd3847;
+}
+
+.market-ticker-loading {
+    padding: 14px;
+    color: #88747a;
+    font-size: 12px;
+}
+
+@media (max-width: 600px) {
+    .market-ticker-card {
+        min-width: 125px;
+    }
+}
+.performance-chart-container {
+    position: relative;
+    width: 100%;
+    height: 320px;
+}
+
+.performance-periods {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.period-btn {
+    padding: 7px 13px;
+    border: 1px solid #eadbd5;
+    border-radius: 8px;
+    background: #fffaf4;
+    color: #641729;
+    cursor: pointer;
+}
+
+.period-btn.active {
+    background: #641729;
+    color: #ffffff;
+    border-color: #641729;
+}
+
+#performance-note {
+    color: #88747a;
+    font-size: 12px;
+    margin-top: 12px;
+}
+
+@media (max-width: 600px) {
+    .performance-chart-container {
+        height: 240px;
+    }
+}
