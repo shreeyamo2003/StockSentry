@@ -1,0 +1,1471 @@
+
+/* =========================================
+   STOCKSENTRY · ANALYSIS DASHBOARD
+   Palette: Royal Blue, Burgundy, Cream
+========================================= */
+
+body {
+    margin: 0;
+    background: var(--cream);
+    color: var(--wine-900);
+}
+
+.analyze-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px 6%;
+    background: var(--cream-deep);
+    border-bottom: 1px solid var(--cream-deep);
+}
+
+.analyze-brand {
+    color: var(--burgundy);
+    font-family: "Fraunces", Georgia, serif;
+    font-size: 1.65rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.back-link {
+    color: var(--royal);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+.portfolio {
+    width: min(1280px, 88%);
+    margin: 0 auto;
+    padding: 56px 0 80px;
+}
+
+.portfolio-heading {
+    position: relative;
+    margin-bottom: 36px;
+}
+
+.portfolio-eyebrow {
+    margin: 0 0 12px;
+    color: var(--burgundy);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+}
+
+.portfolio-heading h1 {
+    margin: 0;
+    color: var(--wine-900);
+    font-family: "Fraunces", Georgia, serif;
+    font-size: clamp(2.3rem, 4vw, 3.8rem);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 1.12;
+}
+
+.portfolio-intro {
+    max-width: 580px;
+    margin-top: 16px;
+    color: var(--ink-soft);
+    font-size: 1rem;
+    line-height: 1.8;
+}
+
+/* Summary cards */
+
+.portfolio-summary {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 64px;
+}
+
+.summary-card {
+    position: relative;
+    min-width: 0;
+    min-height: 150px;
+    padding: 25px 22px;
+    overflow: hidden;
+    background: var(--burgundy);
+    color: var(--cream-light);
+    border: 1px solid var(--burgundy-soft);
+    border-radius: 18px;
+    box-shadow: 0 8px 24px rgba(46, 9, 20, 0.035);
+    transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.summary-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 30px rgba(46, 9, 20, 0.08);
+}
+
+.summary-card > p:first-child {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 0.82rem;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+.summary-card h2 {
+    margin: 22px 0 10px;
+    color: var(--wine-900);
+    font-size: clamp(1.25rem, 1.8vw, 1.9rem);
+    font-weight: 750;
+    letter-spacing: -0.045em;
+    overflow-wrap: anywhere;
+}
+
+.summary-card p:last-child {
+    margin-bottom: 0;
+    color: var(--ink-soft);
+    font-size: 0.77rem;
+    line-height: 1.5;
+}
+
+.summary-main {
+    background: var(--burgundy);
+    color: var(--cream-light);
+    border-color: var(--burgundy);
+}
+
+.summary-main > p:first-child,
+.summary-main p:last-child {
+    color: var(--cream-deep);
+}
+
+.summary-main h2 {
+    color: var(--cream-light);
+}
+
+.summary-performance {
+    border-bottom: 4px solid var(--royal);
+}
+
+/* Holdings heading */
+
+.holdings-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+.holdings-toolbar h2 {
+    margin: 0;
+    color: var(--wine-900);
+    font-family: "Fraunces", Georgia, serif;
+    font-size: clamp(1.7rem, 3vw, 2.4rem);
+    font-weight: 600;
+    letter-spacing: -0.025em;
+}
+
+#holdings-count {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    padding: 8px 12px;
+    background: var(--royal-tint);
+    border-radius: 999px;
+    color: var(--royal-deep);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+}
+
+/* Buttons */
+
+#refresh-portfolio {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 13px 19px;
+    background: var(--royal);
+    border: 1px solid var(--royal);
+    border-radius: 999px;
+    color: var(--cream-light);
+    font: inherit;
+    font-size: 0.86rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 180ms ease, transform 180ms ease;
+}
+
+#refresh-portfolio:hover {
+    background: var(--royal-deep);
+    transform: translateY(-1px);
+}
+
+#refresh-portfolio:disabled {
+    opacity: 0.65;
+    cursor: wait;
+    transform: none;
+}
+
+/* Portfolio loading and status */
+
+.portfolio-message {
+    margin: 0 0 20px;
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+    line-height: 1.7;
+}
+
+/* Stock cards created by portfolio.js */
+
+.holdings-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    gap: 22px;
+}
+
+.holding-card {
+    min-width: 0;
+    padding: 20px;
+    background: var(--burgundy);
+    border: 1px solid var(--burgundy-soft);
+    border-radius: 22px;
+    box-shadow: 0 10px 30px rgba(46, 9, 20, 0.045);
+    animation: card-enter 450ms ease both;
+    transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.holding-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 34px rgba(171, 39, 78, 0.09);
+}
+
+@keyframes card-enter {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.holding-top,
+.holding-identity,
+.holding-price-row,
+.target-header,
+.holding-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+}
+
+.holding-identity {
+    justify-content: flex-start;
+    min-width: 0;
+}
+
+.holding-monogram {
+    display: grid;
+    flex: 0 0 48px;
+    width: 48px;
+    height: 48px;
+    place-items: center;
+    border-radius: 15px;
+    background: var(--cream-light);
+    color: var(--burgundy-soft);
+    font-size: 0.9rem;
+    font-weight: 800;
+}
+
+.holding-name {
+    margin: 0 0 5px;
+    color: var(--wine-900);
+    font-size: 1.05rem;
+    overflow-wrap: anywhere;
+}
+
+.holding-symbol {
+    color: var(--ink-soft);
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+}
+
+.exchange-tag {
+    flex-shrink: 0;
+    padding: 7px 10px;
+    background: var(--royal-tint);
+    border-radius: 999px;
+    color: var(--royal-deep);
+    font-size: 0.7rem;
+    font-weight: 800;
+}
+
+.holding-price-row {
+    align-items: flex-end;
+    margin: 26px 0 22px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid var(--cream-deep);
+}
+
+.holding-current-label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--ink-soft);
+    font-size: 0.78rem;
+}
+
+.holding-current-price {
+    display: block;
+    color: var(--wine-900);
+    font-size: clamp(1.6rem, 2.5vw, 2.15rem);
+    font-weight: 750;
+    letter-spacing: -0.045em;
+    overflow-wrap: anywhere;
+}
+
+.holding-return {
+    color: var(--royal-deep);
+    font-size: 0.9rem;
+    font-weight: 750;
+    text-align: right;
+    overflow-wrap: anywhere;
+}
+
+.holding-return > div + div {
+    margin-top: 5px;
+    font-size: 0.8rem;
+}
+
+.holding-return.negative {
+    color: var(--burgundy);
+}
+
+/* Holding metrics */
+
+.holding-metrics {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 23px;
+}
+
+.holding-metric {
+    min-width: 0;
+}
+
+.holding-metric span {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--ink-soft);
+    font-size: 0.73rem;
+}
+
+.holding-metric strong {
+    display: block;
+    color: var(--wine-900);
+    font-size: 0.88rem;
+    overflow-wrap: anywhere;
+}
+
+/* Target range */
+
+.target-box {
+    padding: 17px;
+    background: var(--cream-light);
+    border: 1px solid var(--cream-deep);
+    border-radius: 15px;
+}
+
+.target-header {
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.target-title {
+    color: var(--burgundy);
+    font-size: 0.68rem;
+    font-weight: 850;
+    letter-spacing: 0.1em;
+}
+
+.target-range {
+    color: var(--wine-900);
+    font-size: 0.82rem;
+    font-weight: 750;
+}
+
+.target-track {
+    height: 7px;
+    margin: 16px 0 12px;
+    overflow: hidden;
+    background: var(--cream-deep);
+    border-radius: 99px;
+}
+
+.target-fill {
+    height: 100%;
+    background: var(--royal);
+    border-radius: inherit;
+    transition: width 450ms ease;
+}
+
+.target-status {
+    color: var(--ink-soft);
+    font-size: 0.78rem;
+    line-height: 1.6;
+}
+
+.target-status.status-inside {
+    color: var(--royal-deep);
+    font-weight: 750;
+}
+
+.target-status.status-stale {
+    color: var(--burgundy);
+}
+
+/* Card footer */
+
+.holding-footer {
+    align-items: flex-start;
+    margin-top: 19px;
+}
+
+.price-updated {
+    color: var(--ink-soft);
+    font-size: 0.7rem;
+    line-height: 1.6;
+}
+
+.delete-holding {
+    flex-shrink: 0;
+    padding: 7px 11px;
+    background: transparent;
+    border: 1px solid var(--cream-deep);
+    border-radius: 999px;
+    color: var(--burgundy);
+    font: inherit;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.delete-holding:hover {
+    background: var(--cream-light);
+    border-color: var(--cream-deep);
+    color: var(--burgundy-soft);
+}
+
+/* Empty state */
+
+.portfolio-empty {
+    grid-column: 1 / -1;
+    padding: 55px 24px;
+    border: 1px dashed var(--cream-deep);
+    border-radius: 22px;
+    text-align: center;
+}
+
+.portfolio-empty-mark {
+    display: inline-grid;
+    width: 58px;
+    height: 58px;
+    place-items: center;
+    background: var(--royal-tint);
+    border-radius: 18px;
+    color: var(--royal);
+    font-size: 1.8rem;
+}
+
+.portfolio-empty h3 {
+    color: var(--wine-900);
+    font-family: "Fraunces", Georgia, serif;
+    font-size: 1.7rem;
+}
+
+.portfolio-empty p {
+    max-width: 440px;
+    margin: 0 auto 22px;
+    color: var(--ink-soft);
+    line-height: 1.7;
+}
+
+.portfolio-empty [data-open-modal] {
+    padding: 12px 18px;
+    background: var(--burgundy);
+    border: 0;
+    border-radius: 999px;
+    color: var(--cream-light);
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.portfolio-disclaimer {
+    margin-top: 32px;
+    color: var(--ink-soft);
+    font-size: 0.78rem;
+    line-height: 1.7;
+}
+
+/* Responsive */
+
+@media (max-width: 1050px) {
+    .portfolio {
+        width: 90%;
+    }
+
+    .portfolio-summary {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .holdings-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .analyze-header {
+        padding: 18px 5%;
+    }
+
+    .portfolio {
+        width: 90%;
+        padding: 38px 0 55px;
+    }
+
+    .portfolio-summary {
+        gap: 11px;
+        margin-bottom: 44px;
+    }
+
+    .summary-card {
+        min-height: 125px;
+        padding: 18px;
+    }
+
+    .holdings-toolbar {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .holding-card {
+        padding: 19px;
+        border: 1px solid var(--wine-900);
+        box-shadow: 0 8px 24px rgba(46, 9, 20, 0.12);
+    }
+
+    .holding-price-row {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .holding-return {
+        text-align: left;
+    }
+
+    .holding-metrics {
+        gap: 9px;
+    }
+}
+
+
+
+/* =====================================
+   STOCKSENTRY PORTFOLIO UI REFINEMENT
+   ===================================== */
+
+.portfolio {
+    max-width: 1240px;
+    padding-top: 38px;
+    padding-bottom: 44px;
+}
+
+/* Tighter page heading */
+.portfolio-heading {
+    margin-bottom: 28px;
+}
+
+.portfolio-heading h1 {
+    font-size: clamp(30px, 3.2vw, 42px);
+    line-height: 1.15;
+    letter-spacing: -1.3px;
+    margin: 8px 0 10px;
+}
+
+.portfolio-intro {
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+/* Compact summary cards with prominent figures */
+.portfolio-summary {
+    gap: 14px;
+    margin-bottom: 42px;
+}
+
+.summary-card {
+    padding: 21px 22px;
+    min-height: 132px;
+    border-radius: 16px;
+    border: 1px solid rgba(94, 20, 36, 0.10);
+    box-shadow: 0 4px 16px rgba(46, 9, 20, 0.035);
+    transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.summary-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(46, 9, 20, 0.075);
+}
+
+.summary-card > p:first-child {
+    font-size: 13px;
+    line-height: 1.4;
+    margin-bottom: 13px;
+}
+
+.summary-card h2 {
+    font-size: clamp(25px, 2.4vw, 32px);
+    line-height: 1.15;
+    letter-spacing: -0.8px;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+    font-variant-numeric: tabular-nums;
+}
+
+.summary-card p:not(:first-child) {
+    font-size: 12px;
+    line-height: 1.5;
+    margin-top: 9px;
+}
+
+/* Keep the main value visually distinctive */
+.summary-main {
+    background: var(--wine-900);
+    color: var(--cream-light);
+}
+
+.summary-main h2 {
+    font-size: clamp(27px, 2.6vw, 35px);
+}
+
+.summary-performance h2 {
+    color: var(--burgundy);
+}
+
+/* Cleaner holdings section */
+.holdings-toolbar {
+    margin-bottom: 19px;
+    gap: 16px;
+    align-items: center;
+}
+
+.holdings-toolbar h2 {
+    font-size: 25px;
+    line-height: 1.25;
+    letter-spacing: -0.6px;
+    margin-top: 5px;
+}
+
+.portfolio-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.portfolio-actions .btn {
+    min-height: 42px;
+    padding: 10px 15px;
+    font-size: 13px;
+    border-radius: 10px;
+}
+
+/* Smaller, more readable holding cards */
+.holdings-grid {
+    gap: 17px;
+    align-items: start;
+}
+
+.holding-card {
+    padding: 21px;
+    border-radius: 16px;
+    border: 1px solid rgba(94, 20, 36, 0.12);
+    box-shadow: 0 4px 15px rgba(46, 9, 20, 0.035);
+    min-width: 0;
+    transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.holding-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 9px 24px rgba(46, 9, 20, 0.075);
+}
+
+.holding-top {
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.holding-monogram {
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    font-size: 13px;
+    border-radius: 12px;
+}
+
+.holding-name {
+    font-size: 16px;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+}
+
+.holding-symbol {
+    font-size: 12px;
+    margin-top: 3px;
+}
+
+.exchange-tag {
+    font-size: 10px;
+    padding: 5px 8px;
+    border-radius: 7px;
+}
+
+/* Give current price and P/L more emphasis */
+.holding-price-row {
+    gap: 12px;
+    margin-bottom: 21px;
+    align-items: center;
+}
+
+.holding-current-label {
+    display: block;
+    font-size: 12px;
+    line-height: 1.4;
+    margin-bottom: 7px;
+}
+
+.holding-current-price {
+    display: block;
+    font-size: clamp(23px, 2vw, 29px);
+    line-height: 1.2;
+    letter-spacing: -0.7px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
+}
+
+.holding-return {
+    font-size: 13px;
+    line-height: 1.6;
+    font-weight: 600;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
+}
+
+/* Compact metrics with stronger values */
+.holding-metrics {
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.holding-metric {
+    padding: 12px 10px;
+    border-radius: 10px;
+    min-width: 0;
+}
+
+.holding-metric span {
+    display: block;
+    font-size: 11px;
+    line-height: 1.4;
+    margin-bottom: 7px;
+}
+
+.holding-metric strong {
+    display: block;
+    font-size: 14px;
+    line-height: 1.4;
+    font-weight: 650;
+    overflow-wrap: anywhere;
+    font-variant-numeric: tabular-nums;
+}
+
+/* More compact target zone */
+.target-box {
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+}
+
+.target-header {
+    gap: 10px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+}
+
+.target-title {
+    font-size: 30px;
+    letter-spacing: 0.5px;
+}
+
+.target-range {
+    font-size: 12px;
+    font-weight: 650;
+    font-variant-numeric: tabular-nums;
+}
+
+.target-track {
+    height: 6px;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.target-fill {
+    border-radius: inherit;
+}
+
+.target-status {
+    font-size: 12px;
+    line-height: 1.5;
+    margin-top: 10px;
+}
+
+/* Quiet, tidy footer */
+.holding-footer {
+    padding-top: 13px;
+    gap: 10px;
+    align-items: center;
+}
+
+.price-updated {
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+.delete-holding {
+    font-size: 12px;
+    padding: 6px 9px;
+    border-radius: 8px;
+    flex-shrink: 0;
+}
+
+/* Empty state */
+.portfolio-empty {
+    padding: 38px 24px;
+    border-radius: 16px;
+}
+
+.portfolio-empty h3 {
+    font-size: 23px;
+    margin: 12px 0 8px;
+}
+
+.portfolio-empty p {
+    max-width: 420px;
+    margin-inline: auto;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+/* Responsive layout */
+@media (max-width: 760px) {
+    .portfolio {
+        padding-top: 25px;
+        padding-bottom: 30px;
+    }
+
+    .portfolio-summary {
+        gap: 10px;
+        margin-bottom: 32px;
+    }
+
+    .summary-card {
+        padding: 17px;
+        min-height: 115px;
+    }
+
+    .holdings-toolbar {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .portfolio-actions {
+        width: 100%;
+    }
+
+    .portfolio-actions .btn {
+        flex: 1;
+    }
+
+    .holding-card {
+        padding: 18px;
+    }
+}
+
+@media (max-width: 420px) {
+    .holding-price-row {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .holding-return {
+        text-align: left;
+    }
+
+    .holding-metric {
+        padding: 10px 8px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .summary-card,
+    .holding-card {
+        transition: none;
+    }
+
+    .summary-card:hover,
+    .holding-card:hover {
+        transform: none;
+    }
+}
+
+/* Refine holding cards: original burgundy, larger text */
+
+/* Restore the lighter burgundy instead of the dark wine */
+.summary-main {
+    background: var(--burgundy);
+    color: var(--cream-light);
+}
+
+/* Make profit/loss and return easier to read */
+.holding-return {
+    font-size: 16px;
+    line-height: 1.7;
+    font-weight: 700;
+}
+
+/* Larger quantity, buy price and current value */
+.holding-metric span {
+    font-size: 15px;
+    margin-bottom: 8px;
+}
+
+.holding-metric strong {
+    font-size: 16px;
+    line-height: 1.45;
+    font-weight: 700;
+}
+
+/* More prominent target range */
+.target-title {
+    font-size: 11px;
+    letter-spacing: 0.9px;
+}
+
+.target-range {
+    font-size: 14px;
+    line-height: 1.5;
+    font-weight: 700;
+}
+
+.target-status {
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* Make the price-update timestamp readable */
+.price-updated {
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+/* Make Remove easier to see */
+.delete-holding {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+/* Keep the stock's current price as the main focal point */
+.holding-current-price {
+    font-size: clamp(27px, 2.2vw, 32px);
+}
+
+/* Keep the card compact while improving readability */
+.holding-card {
+    padding: 15px;
+}
+
+.holding-metrics {
+    gap: 8px;
+}
+
+.holding-metric {
+    padding: 12px 9px;
+}
+
+/* Restore the burgundy emphasis on profit/loss */
+.summary-performance h2 {
+    color: var(--burgundy);
+}
+
+/* =====================================
+   STOCKSENTRY PORTFOLIO FOOTER
+   ===================================== */
+
+.portfolio-footer {
+    margin-top: 56px;
+    padding: 32px 24px 24px;
+    background: var(--burgundy);
+    color: var(--cream-light);
+    border-top: 3px solid var(--royal);
+}
+
+.portfolio-footer-inner {
+    max-width: 1240px;
+    margin: 0 auto;
+}
+
+.portfolio-footer-brand {
+    display: inline-block;
+    color: var(--cream-light);
+    font-family: "Fraunces", Georgia, serif;
+    font-size: 25px;
+    font-weight: 600;
+    letter-spacing: -0.7px;
+    text-decoration: none;
+}
+
+.portfolio-footer-brand span {
+    color: var(--royal-tint);
+}
+
+.portfolio-footer-tagline {
+    margin: 7px 0 24px;
+    color: var(--cream-deep);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.portfolio-footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding-top: 17px;
+    border-top: 1px solid rgba(244, 235, 221, 0.22);
+    font-size: 13px;
+    color: var(--cream-deep);
+}
+
+.portfolio-footer-link {
+    color: var(--cream-light);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 180ms ease;
+}
+
+.portfolio-footer-link:hover {
+    color: var(--royal-tint);
+}
+
+.portfolio-footer-note {
+    margin: 14px 0 0;
+    color: var(--cream-deep);
+    font-size: 13px;
+    line-height: 1.7;
+    opacity: 0.85;
+}
+
+@media (max-width: 480px) {
+    .portfolio-footer {
+        margin-top: 38px;
+        padding: 27px 20px 22px;
+    }
+
+    .portfolio-footer-bottom {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
+    }
+}
+
+/* Text colours for burgundy cards */
+.summary-card > p,
+.summary-card h2,
+.holding-name,
+.holding-current-label,
+.holding-current-price,
+.holding-return,
+.holding-metric span,
+.holding-metric strong,
+.target-title,
+.target-range,
+.target-status,
+.price-updated {
+    color: var(--cream-light);
+}
+
+/* Softer supporting text */
+.holding-symbol,
+.holding-metric span,
+.holding-current-label,
+.price-updated {
+    color: var(--cream-deep);
+}
+
+/* Slightly lighter panels inside holding cards */
+.holding-metric,
+.target-box {
+    background: var(--wine-800);
+    border: 1px solid rgba(244, 235, 221, 0.12);
+}
+
+/* Keep the target progress visible */
+.target-track {
+    background: var(--cream-deep);
+}
+
+/* Maintain readable buttons and remove action */
+.delete-holding {
+    color: var(--cream-light);
+}
+
+/* Keep the performance figure readable */
+.summary-performance h2 {
+    color: var(--cream-light);
+}
+
+/* Readable text on burgundy holding cards */
+.holding-card .holding-name,
+.holding-card .holding-current-price,
+.holding-card .holding-metric strong,
+.holding-card .holding-return,
+.holding-card .holding-return.negative {
+    color: var(--cream-light);
+}
+
+.holding-card .holding-symbol,
+.holding-card .holding-current-label,
+.holding-card .holding-metric span,
+.holding-card .price-updated {
+    color: var(--cream-deep);
+}
+
+/* Darker burgundy outline */
+.holding-card {
+    border: 1px solid var(--wine-900);
+}
+
+/* Make summary card text cream instead of grey */
+.portfolio-summary .summary-card > p,
+.portfolio-summary .summary-card p,
+.portfolio-summary .summary-card h2 {
+    color: var(--cream-light);
+}
+
+/* Make supporting summary text slightly softer */
+.portfolio-summary .summary-card p:not(:first-child) {
+    color: var(--cream-deep);
+}
+
+/* Keep all summary card backgrounds burgundy */
+.portfolio-summary .summary-card {
+    background: var(--burgundy);
+    color: var(--cream-light);
+    border: 1px solid var(--wine-900);
+}
+
+
+/* =====================================
+   STOCKSENTRY — PORTFOLIO CHARTS
+   ===================================== */
+
+.charts-section {
+    margin: 34px 0 38px;
+    padding: 28px;
+    background: var(--cream-light);
+    border: 1px solid rgba(94, 20, 36, 0.12);
+    border-radius: 20px;
+    box-shadow: 0 6px 24px rgba(46, 9, 20, 0.04);
+}
+
+.charts-heading {
+    margin-bottom: 24px;
+}
+
+.charts-heading h2 {
+    margin: 6px 0 8px;
+    color: var(--burgundy);
+    font-size: clamp(24px, 2.5vw, 31px);
+    letter-spacing: -0.7px;
+}
+
+.charts-heading > p:last-child {
+    color: var(--text-muted, #74666A);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    align-items: stretch;
+}
+
+.chart-card {
+    min-width: 0;
+    padding: 22px;
+    background: #FFFCF7;
+    border: 1px solid rgba(94, 20, 36, 0.12);
+    border-radius: 16px;
+    box-shadow: 0 3px 12px rgba(46, 9, 20, 0.035);
+    transition: box-shadow 180ms ease, transform 180ms ease;
+}
+
+.chart-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(46, 9, 20, 0.07);
+}
+
+.chart-card-heading {
+    margin-bottom: 18px;
+}
+
+.chart-card-heading h3 {
+    margin: 0 0 6px;
+    color: var(--burgundy);
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.chart-card-heading p {
+    margin: 0;
+    color: #786B6D;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.chart-container {
+    position: relative;
+    width: 100%;
+    height: 300px;
+}
+
+.chart-container canvas {
+    display: block;
+    max-width: 100%;
+}
+
+@media (max-width: 760px) {
+    .charts-section {
+        margin: 26px 0 30px;
+        padding: 20px;
+    }
+
+    .charts-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 15px;
+    }
+
+    .chart-card {
+        padding: 17px;
+    }
+
+    .chart-container {
+        height: 270px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .chart-card {
+        transition: none;
+    }
+
+    .chart-card:hover {
+        transform: none;
+    }
+}
+
+/* =====================================
+   STOCKSENTRY — RISK MONITORING
+   ===================================== */
+
+.risk-section {
+    margin: 0 0 40px;
+    padding: 26px;
+    background: #FFFCF7;
+    border: 1px solid rgba(94, 20, 36, 0.13);
+    border-radius: 20px;
+    box-shadow: 0 5px 20px rgba(46, 9, 20, 0.035);
+}
+
+.risk-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 18px;
+    margin-bottom: 22px;
+}
+
+.risk-heading h2 {
+    margin: 6px 0 7px;
+    color: var(--burgundy);
+    font-size: clamp(23px, 2.4vw, 29px);
+    letter-spacing: -0.6px;
+}
+
+.risk-heading > div > p:last-child {
+    margin: 0;
+    color: #786B6D;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.risk-indicator {
+    padding: 8px 11px;
+    border-radius: 8px;
+    background: rgba(36, 73, 166, 0.08);
+    color: var(--royal);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.7px;
+    white-space: nowrap;
+}
+
+.risk-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 15px;
+}
+
+.risk-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 13px;
+    min-width: 0;
+    padding: 19px 16px;
+    background: var(--cream-light);
+    border: 1px solid rgba(94, 20, 36, 0.10);
+    border-radius: 13px;
+}
+
+.risk-icon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: rgba(100, 30, 50, 0.08);
+    color: var(--burgundy);
+    font-size: 19px;
+    font-weight: 700;
+}
+
+.risk-card p {
+    margin: 0 0 7px;
+    color: #786B6D;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.risk-card h3 {
+    margin: 0 0 6px;
+    color: var(--burgundy);
+    font-size: 21px;
+    overflow-wrap: anywhere;
+}
+
+.risk-card div > span {
+    color: #786B6D;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+@media (max-width: 760px) {
+    .risk-section {
+        padding: 19px;
+    }
+
+    .risk-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 10px;
+    }
+
+    .risk-heading {
+        flex-direction: column;
+    }
+}
+
+/* Risk alert states */
+.risk-card.risk-warning {
+    border-color: rgba(190, 120, 35, 0.45);
+    background: #FFF6E8;
+}
+
+.risk-card.risk-warning .risk-icon {
+    background: rgba(190, 120, 35, 0.14);
+    color: #9A5B12;
+}
+
+.risk-card.risk-warning h3 {
+    color: #9A5B12;
+}
+
+.risk-card.risk-good {
+    border-color: rgba(36, 73, 166, 0.20);
+}
+
+.risk-card.risk-good .risk-icon {
+    background: rgba(36, 73, 166, 0.09);
+    color: var(--royal);
+}
+
+.risk-card.risk-neutral {
+    border-color: rgba(94, 20, 36, 0.12);
+}
+
+.target-alert-badge {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    margin-bottom: 12px;
+    padding: 6px 10px;
+    border-radius: 7px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+}
+
+.target-alert-badge.approaching {
+    background: #FFF0D9;
+    color: #925510;
+}
+
+.target-alert-badge.reached {
+    background: #E7F3EA;
+    color: #24683B;
+}
+
+.target-alert-badge.above {
+    background: #F9E6E9;
+    color: #8E263B;
+}
+
+.target-alert-badge.outside {
+    background: #EAF0FC;
+    color: #2449A6;
+}
+
+.target-alert-badge.unavailable {
+    background: #EEE9E8;
+    color: #62585A;
+}

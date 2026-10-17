@@ -208,3 +208,15 @@
 
   updateLive();
 })();
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (window.location.hash === "#add-holding") {
+    const openButton = document.querySelector("[data-open-modal]");
+
+    if (openButton) {
+      openButton.click();
+    }
+  }
+});

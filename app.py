@@ -11,7 +11,7 @@
 # if __name__ == "__main__":
 #     # use_reloader=False keeps the scheduler from starting twice later on
 #     app.run(host="127.0.0.1", port=5000, debug=True, use_reloader=False)
-
+import yfinance as yf
 from monitor import refresh_all_prices
 from calculations import (
     calculate_invested_value,
@@ -60,7 +60,6 @@ def validate_stock(data):
         return "Near-target percentage must be between 0 and 100."
 
     return None
-
 
 @app.route("/")
 def home():
@@ -246,6 +245,11 @@ def portfolio_summary():
                 round(return_percentage, 2)
                 if return_percentage is not None else None
             ),
+            "target_status": (
+            __import__("monitor").check_target_status(stock, float(current_price))
+            if current_price is not None
+            else "PRICE_UNAVAILABLE"
+),
         })
 
         holdings.append(stock)
@@ -272,7 +276,9 @@ def portfolio_summary():
     })
 
 
-
+@app.route("/analyze")
+def analyze():
+    return render_template("analyze.html")
 
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=5000, debug=True, use_reloader=False)

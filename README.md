@@ -54,6 +54,21 @@ StockSentry/
 ├── templates/
 └── static/
 ```
+## Notification check
+Your notification only appears when a stock has one of these statuses:
+- Approaching target
+- Target reached
+- Above target
+
+If the stock is OUTSIDE_TARGET, no notification is sent.
+Let's test it without changing your actual stock targets
+Open Chrome → press F12 → Console, then paste:
+```bash
+new Notification("StockSentry Test", {
+  body: "Your desktop notifications are working!",
+  requireInteraction: true
+});
+```
 
 ## Limitations
 

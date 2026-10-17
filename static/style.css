@@ -277,17 +277,113 @@ input[type="range"] { width: 100%; accent-color: var(--royal); height: 28px; cur
   .modal-side { border-radius: 28px 28px 0 0; padding: 2rem 1.6rem 1.6rem; }
   .side-foot { display: none; }
 }
+
 @media (max-width: 600px) {
-  body { font-size: 16px; }
-  .nav-links a { display: none; }
-  .uses-grid, .steps { grid-template-columns: 1fr; }
-  .use-wine { grid-column: span 1; }
-  .modal-form { grid-template-columns: 1fr; padding: 1.8rem 1.4rem; }
-  .span-2 { grid-column: span 1; }
-  .chip-b { right: 0; }
+  body {
+    font-size: 16px;
+  }
+
+  .nav {
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 14px 16px;
+  }
+
+  .nav-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .nav-links a {
+    display: inline-block;
+    font-size: 13px;
+  }
+
+  .nav-links .btn {
+    display: inline-block;
+    font-size: 13px;
+  }
+
+  .uses-grid,
+  .steps {
+    grid-template-columns: 1fr;
+  }
+
+  .use-wine {
+    grid-column: span 1;
+  }
+
+  .modal-form {
+    grid-template-columns: 1fr;
+    padding: 1.8rem 1.4rem;
+  }
+
+  .span-2 {
+    grid-column: span 1;
+  }
+
+  .chip-b {
+    right: 0;
+  }
 }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
   .price-line { stroke-dashoffset: 0; }
   .pulse { opacity: 1; }
+}
+
+/* Mobile hamburger navigation */
+.menu-toggle {
+  display: none;
+  background: transparent;
+  border: 1px solid var(--burgundy);
+  color: var(--burgundy);
+  border-radius: 8px;
+  padding: 6px 11px;
+  font-size: 23px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .nav {
+    position: relative;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 16px;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    width: 100%;
+    padding: 8px 0;
+    background: var(--cream);
+  }
+
+  .nav-links.open {
+    display: flex;
+  }
+
+  .nav-links a {
+    display: block;
+    padding: 12px 8px;
+    font-size: 15px;
+  }
+
+  .nav-links .btn {
+    align-self: flex-start;
+    margin: 8px;
+  }
 }
