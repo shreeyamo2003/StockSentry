@@ -4,7 +4,7 @@ A personal stock portfolio tracking and price alert system for Indian NSE and BS
 
 ## Features
 
-StockSentry lets you add, edit and remove stock holdings with a quantity, purchase price and target price range. It retrieves market prices through yfinance and calculates your invested amount, current value, unrealised profit or loss, and percentage return. A background scheduler checks prices at regular intervals and creates a dashboard alert when a stock enters its target range, with optional email alerts sent over SMTP. If a fresh price cannot be retrieved, the last known price is kept and clearly marked as stale.
+StockSentry lets you add, edit and remove stock holdings with a quantity, purchase price and target price range. It retrieves market prices through yfinance and calculates your invested amount, current value, unrealised profit or loss, and percentage return. A background scheduler checks prices at regular intervals and creates a dashboard alert when a stock enters its target range through desktop notifications. If a fresh price cannot be retrieved, the last known price is kept and clearly marked as stale.
 
 ## Tech Stack
 
@@ -26,7 +26,7 @@ python app.py
 
 Then open http://127.0.0.1:5000 in your browser. The database is created automatically on first run.
 
-## Email Alerts (Optional)
+## Email Alerts (Optional-you can approach if you like)
 
 Create a `.env` file in the project root with your SMTP settings:
 
@@ -54,7 +54,7 @@ StockSentry/
 ├── templates/
 └── static/
 ```
-## Notification check
+## Notification check(using this instead of email alerts)
 Your notification only appears when a stock has one of these statuses:
 - Approaching target
 - Target reached
