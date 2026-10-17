@@ -202,21 +202,65 @@
             Market prices may be delayed. StockSentry does not place trades.
         </p>
 
-        <section class="market-ticker-section" aria-label="Stock market watchlist">
+        
+<section class="market-ticker-section" aria-label="Stock market watchlist">
     <div class="market-ticker-heading">
-        <span class="market-live-dot"></span>
-        <span>MARKET WATCH</span>
-        <span class="market-ticker-hint">Swipe to explore →</span>
+        <div>
+            <p class="portfolio-eyebrow">MARKET WATCH</p>
+            <h2>Explore the market.</h2>
+            <p class="market-ticker-subtitle">
+                Discover stocks and track daily price movements.
+            </p>
+        </div>
+        <span class="market-ticker-status">
+            <span class="market-live-dot"></span>
+            Daily prices
+        </span>
+    </div>
+
+    <div class="market-ticker-controls">
+        <div class="market-ticker-search-wrapper">
+  <div class="market-ticker-search">
+    <span aria-hidden="true">⌕</span>
+    <input
+      type="search"
+      id="marketTickerSearch"
+      placeholder="Search stocks or companies..."
+      aria-label="Search stocks or companies"
+      autocomplete="off"
+    >
+  </div>
+
+  <div
+    id="marketSearchDropdown"
+    class="market-search-dropdown"
+    role="listbox"
+    hidden
+  ></div>
+</div>
+
+        <div class="market-category-filters" id="marketCategoryFilters">
+            <button type="button" class="market-category-btn active"
+                    data-category="All">All stocks</button>
+            <button type="button" class="market-category-btn"
+                    data-category="NSE Stocks">NSE stocks</button>
+        </div>
     </div>
 
     <div class="market-ticker" id="marketTicker">
         <div class="market-ticker-track" id="marketTickerTrack">
             <div class="market-ticker-loading">
-                Loading market prices...
+                Discovering stocks...
             </div>
         </div>
     </div>
+
+    <div class="market-ticker-footer">
+        <span id="marketTickerCount">Loading stocks...</span>
+        <span>Swipe or scroll horizontally to explore →</span>
+    </div>
 </section>
+
     </main>
 
 <footer class="portfolio-footer">

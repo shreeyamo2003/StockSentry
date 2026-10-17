@@ -12,6 +12,7 @@
 #     # use_reloader=False keeps the scheduler from starting twice later on
 #     app.run(host="127.0.0.1", port=5000, debug=True, use_reloader=False)
 import yfinance as yf
+from market_data import discover_nse_stocks
 from flask import Flask, render_template, request, jsonify, redirect, url_for, flash
 from flask_login import (
     LoginManager,
@@ -413,106 +414,138 @@ def analyze():
 
 
 
+
 @app.route("/api/market-watch", methods=["GET"])
 @login_required
 def market_watch():
-    import yfinance as yf
+    import time
+    from flask import request
+    from market_data import get_stock_price, discover_nse_stocks
 
-    watchlist = [
-        # Market indices
-        {"symbol": "^NSEI", "name": "Nifty 50", "category": "Indices"},
-        {"symbol": "^BSESN", "name": "Sensex", "category": "Indices"},
-        {"symbol": "^NSEBANK", "name": "Nifty Bank", "category": "Indices"},
-        {"symbol": "^CNXIT", "name": "Nifty IT", "category": "Indices"},
-        {"symbol": "^CNXAUTO", "name": "Nifty Auto", "category": "Indices"},
+    # Cache price results to avoid repeated Yahoo Finance requests.
+    cache = app.config.setdefault(
+        "MARKET_WATCH_CACHE",
+        {"updated_at": 0, "stocks": []}
+    )
 
-        # Banking
-        {"symbol": "HDFCBANK.NS", "name": "HDFC Bank", "category": "Banking"},
-        {"symbol": "ICICIBANK.NS", "name": "ICICI Bank", "category": "Banking"},
-        {"symbol": "SBIN.NS", "name": "SBI", "category": "Banking"},
-        {"symbol": "AXISBANK.NS", "name": "Axis Bank", "category": "Banking"},
-        {"symbol": "KOTAKBANK.NS", "name": "Kotak Bank", "category": "Banking"},
-
-        # IT
-        {"symbol": "TCS.NS", "name": "TCS", "category": "IT"},
-        {"symbol": "INFY.NS", "name": "Infosys", "category": "IT"},
-        {"symbol": "WIPRO.NS", "name": "Wipro", "category": "IT"},
-        {"symbol": "HCLTECH.NS", "name": "HCL Tech", "category": "IT"},
-
-        # Popular large-cap stocks
-        {"symbol": "RELIANCE.NS", "name": "Reliance", "category": "Popular"},
-        {"symbol": "BHARTIARTL.NS", "name": "Bharti Airtel", "category": "Popular"},
-        {"symbol": "ITC.NS", "name": "ITC", "category": "Popular"},
-        {"symbol": "LT.NS", "name": "L&T", "category": "Popular"},
-
-        # Automobile
-        {"symbol": "TATAMOTORS.NS", "name": "Tata Motors", "category": "Auto"},
-        {"symbol": "MARUTI.NS", "name": "Maruti Suzuki", "category": "Auto"},
-        {"symbol": "M&M.NS", "name": "Mahindra & Mahindra", "category": "Auto"},
-        {"symbol": "HEROMOTOCO.NS", "name": "Hero MotoCorp", "category": "Auto"},
-
-        # Pharma
-        {"symbol": "SUNPHARMA.NS", "name": "Sun Pharma", "category": "Pharma"},
-        {"symbol": "DRREDDY.NS", "name": "Dr Reddy's", "category": "Pharma"},
-        {"symbol": "CIPLA.NS", "name": "Cipla", "category": "Pharma"},
-        {"symbol": "DIVISLAB.NS", "name": "Divi's Labs", "category": "Pharma"},
-
-        # FMCG
-        {"symbol": "HINDUNILVR.NS", "name": "HUL", "category": "FMCG"},
-        {"symbol": "NESTLEIND.NS", "name": "Nestle India", "category": "FMCG"},
-        {"symbol": "ITC.NS", "name": "ITC", "category": "FMCG"},
-        {"symbol": "TATACONSUM.NS", "name": "Tata Consumer", "category": "FMCG"},
-    ]
-
-    results = []
-
-    for item in watchlist:
+    now = time.time()
+    if now - cache["updated_at"] < 900 and cache["stocks"]:
+        stocks = cache["stocks"]
+    else:
         try:
-            history = yf.Ticker(item["symbol"]).history(
-                period="5d",
-                interval="1d"
-            )
+            discovered = discover_nse_stocks()
 
-            if history.empty or len(history) < 1:
-                continue
+            # Fetch a limited batch first to keep the dashboard responsive.
+            batch = discovered.head(30)
+            stocks = []
 
-            latest_price = float(history["Close"].iloc[-1])
+            for _, row in batch.iterrows():
+                symbol = row["SYMBOL"]
+                try:
+                    price_data = get_stock_price(symbol)
+                    if price_data:
+                        price_data["name"] = row["NAME OF COMPANY"]
+                        price_data["category"] = "NSE Stocks"
+                        stocks.append(price_data)
+                except Exception:
+                    app.logger.warning(
+                        "Could not fetch price for %s",
+                        symbol,
+                        exc_info=True,
+                    )
 
-            # Skip invalid prices
-            if latest_price <= 0:
-                continue
-
-            previous_price = (
-                float(history["Close"].iloc[-2])
-                if len(history) >= 2
-                else latest_price
-            )
-
-            change_pct = (
-                ((latest_price - previous_price) / previous_price) * 100
-                if previous_price > 0
-                else 0
-            )
-
-            results.append({
-                "symbol": item["symbol"].replace(".NS", "").replace(".BO", ""),
-                "name": item["name"],
-                "category": item["category"],
-                "price": round(latest_price, 2),
-                "change": round(latest_price - previous_price, 2),
-                "change_pct": round(change_pct, 2),
-            })
+            cache["stocks"] = stocks
+            cache["updated_at"] = now
 
         except Exception:
-            app.logger.warning(
-                "Market ticker could not load %s",
-                item["symbol"],
-                exc_info=True,
-            )
-            continue
+            app.logger.exception("Automatic NSE stock discovery failed")
+            if not cache["stocks"]:
+                return jsonify({
+                    "error": "Unable to retrieve NSE stocks right now."
+                }), 503
+            stocks = cache["stocks"]
 
-    return jsonify(results)
-    
+    search = request.args.get("search", "").strip().lower()
+    if search:
+        stocks = [
+            stock for stock in stocks
+            if search in stock["symbol"].lower()
+            or search in stock["name"].lower()
+        ]
+
+    return jsonify(stocks)
+
+
+@app.route("/api/market-search")
+@login_required
+def market_search():
+    from flask import request
+    from market_data import discover_nse_stocks
+
+    query = request.args.get("q", "").strip().lower()
+
+    if len(query) < 2:
+        return jsonify([])
+
+    try:
+        discovered = discover_nse_stocks()
+
+        matches = discovered[
+            discovered["SYMBOL"].str.lower().str.contains(
+                query, regex=False, na=False
+            )
+            | discovered["NAME OF COMPANY"].str.lower().str.contains(
+                query, regex=False, na=False
+            )
+        ].head(20)
+
+        return jsonify([
+            {
+                "symbol": row["SYMBOL"],
+                "name": row["NAME OF COMPANY"],
+                "category": "NSE Stocks",
+            }
+            for _, row in matches.iterrows()
+        ])
+
+    except Exception:
+        app.logger.exception("NSE stock search failed")
+        return jsonify({
+            "error": "Unable to search NSE stocks right now."
+        }), 503
+
+
+@app.route("/api/market-price/<symbol>")
+@login_required
+def market_price(symbol):
+    from market_data import discover_nse_stocks, get_stock_price
+
+    symbol = symbol.strip().upper()
+
+    # Only allow symbols present in the discovered NSE list.
+    try:
+        stocks = discover_nse_stocks()
+        match = stocks[stocks["SYMBOL"] == symbol]
+
+        if match.empty:
+            return jsonify({"error": "Unknown NSE symbol"}), 404
+
+        result = get_stock_price(symbol)
+
+        if not result:
+            return jsonify({
+                "error": "Price is currently unavailable for this stock."
+            }), 404
+
+        result["name"] = match.iloc[0]["NAME OF COMPANY"]
+        result["category"] = "NSE Stocks"
+        return jsonify(result)
+
+    except Exception:
+        app.logger.exception("Could not fetch price for %s", symbol)
+        return jsonify({"error": "Unable to fetch this stock's price."}), 503
+
+
 @app.route("/api/performance")
 @login_required
 def portfolio_performance():

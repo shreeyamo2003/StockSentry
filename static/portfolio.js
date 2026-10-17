@@ -632,6 +632,10 @@ function checkTargetNotifications(holdings) {
         localStorage.setItem(storageKey, status);
     });
 }
+
+let marketStocks = [];
+let selectedMarketCategory = "All";
+
 async function loadMarketTicker() {
     const track = document.getElementById("marketTickerTrack");
     if (!track) return;
@@ -643,43 +647,214 @@ async function loadMarketTicker() {
             throw new Error("Unable to fetch market prices");
         }
 
-        const stocks = await response.json();
-
-        if (!stocks.length) {
-            track.innerHTML =
-                '<div class="market-ticker-loading">Market prices are unavailable right now.</div>';
-            return;
-        }
-
-        track.innerHTML = stocks.map(stock => {
-            const positive = stock.change >= 0;
-            const sign = positive ? "+" : "";
-
-            return `
-                <article class="market-ticker-card">
-                    <div class="market-ticker-symbol">${stock.symbol}</div>
-                    <div class="market-ticker-name">${stock.name}</div>
-                    <div class="market-ticker-price">
-                        ₹${Number(stock.price).toLocaleString("en-IN", {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2
-                        })}
-                    </div>
-                    <div class="market-ticker-change ${positive ? "positive" : "negative"}">
-                        ${sign}${Number(stock.change_pct).toFixed(2)}%
-                    </div>
-                </article>
-            `;
-        }).join("");
-
+        marketStocks = await response.json();
+        renderMarketTicker();
+        renderMarketCategories();
     } catch (error) {
         console.error("Market ticker error:", error);
-        track.innerHTML =
-            '<div class="market-ticker-loading">Could not load market prices. Please refresh.</div>';
+        track.innerHTML = `
+            <div class="market-ticker-loading">
+                Could not load market prices. Please refresh.
+            </div>`;
+        document.getElementById("marketTickerCount").textContent =
+            "Market data unavailable";
     }
 }
 
+function renderMarketCategories() {
+    const container = document.getElementById("marketCategoryFilters");
+    if (!container) return;
+
+    const categories = [
+        "All",
+        ...new Set(marketStocks.map(stock => stock.category).filter(Boolean))
+    ];
+
+    container.innerHTML = categories.map(category => `
+        <button
+            type="button"
+            class="market-category-btn ${
+                category === selectedMarketCategory ? "active" : ""
+            }"
+            data-category="${category}">
+            ${category === "All" ? "All stocks" : category}
+        </button>
+    `).join("");
+}
+
+function renderMarketTicker() {
+    const track = document.getElementById("marketTickerTrack");
+    const count = document.getElementById("marketTickerCount");
+    const searchInput = document.getElementById("marketTickerSearch");
+
+    if (!track) return;
+
+    const query = (searchInput?.value || "").trim().toLowerCase();
+
+    const filtered = marketStocks.filter(stock => {
+        const matchesCategory =
+            selectedMarketCategory === "All" ||
+            stock.category === selectedMarketCategory;
+
+        const matchesSearch =
+            String(stock.symbol || "").toLowerCase().includes(query) ||
+            String(stock.name || "").toLowerCase().includes(query);
+
+        return matchesCategory && matchesSearch;
+    });
+
+    if (count) {
+        count.textContent = `${filtered.length} stocks shown`;
+    }
+
+    if (!filtered.length) {
+        track.innerHTML = `
+            <div class="market-ticker-loading">
+                No matching stocks found.
+            </div>`;
+        return;
+    }
+
+    track.innerHTML = filtered.map(stock => {
+        const change = Number(stock.change_pct || 0);
+        const positive = change >= 0;
+        const sign = positive ? "+" : "";
+
+        return `
+            <article class="market-ticker-card">
+                <div class="market-ticker-symbol">
+                    ${escapeTickerText(stock.symbol)}
+                </div>
+                <div class="market-ticker-name">
+                    ${escapeTickerText(stock.name)}
+                </div>
+                <div class="market-ticker-price">
+                    ₹${Number(stock.price).toLocaleString("en-IN", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    })}
+                </div>
+                <div class="market-ticker-change ${
+                    positive ? "positive" : "negative"
+                }">
+                    ${positive ? "▲" : "▼"}
+                    ${sign}${change.toFixed(2)}%
+                </div>
+            </article>`;
+    }).join("");
+
+    // Start the filtered list at its beginning.
+    document.getElementById("marketTicker")?.scrollTo({
+        left: 0,
+        behavior: "smooth"
+    });
+}
+
+function escapeTickerText(value) {
+    return String(value ?? "").replace(/[&<>"']/g, character => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[character]);
+}
+
+
+let marketSearchTimer;
+
+document.addEventListener("input", event => {
+    if (event.target.id !== "marketTickerSearch") return;
+
+    const query = event.target.value.trim();
+    const dropdown = document.getElementById("marketSearchDropdown");
+
+    clearTimeout(marketSearchTimer);
+
+    if (!dropdown) return;
+
+    if (query.length < 2) {
+        dropdown.hidden = true;
+        dropdown.innerHTML = "";
+        renderMarketTicker();
+        return;
+    }
+
+    dropdown.hidden = false;
+    dropdown.innerHTML = `
+        <div class="market-search-message">Searching NSE stocks...</div>
+    `;
+
+    marketSearchTimer = setTimeout(async () => {
+        try {
+            const response = await fetch(
+                `/api/market-search?q=${encodeURIComponent(query)}`
+            );
+
+            if (!response.ok) {
+                throw new Error("Stock search failed");
+            }
+
+            const results = await response.json();
+
+            // Ignore results if the user has already changed the query.
+            if (document.getElementById("marketTickerSearch")?.value.trim() !== query) {
+                return;
+            }
+
+            if (!results.length) {
+                dropdown.innerHTML = `
+                    <div class="market-search-message">
+                        No matching NSE stocks found.
+                    </div>
+                `;
+                return;
+            }
+
+            dropdown.innerHTML = results.map(stock => `
+                <button
+                    type="button"
+                    class="market-search-option"
+                    data-symbol="${escapeTickerText(stock.symbol)}"
+                    data-name="${escapeTickerText(stock.name)}"
+                    role="option"
+                >
+                    <span class="market-search-option-symbol">
+                        ${escapeTickerText(stock.symbol)}
+                    </span>
+                    <span class="market-search-option-name">
+                        ${escapeTickerText(stock.name)}
+                    </span>
+                </button>
+            `).join("");
+
+        } catch (error) {
+            console.error("Stock search error:", error);
+            dropdown.innerHTML = `
+                <div class="market-search-message">
+                    Search unavailable. Please try again.
+                </div>
+            `;
+        }
+    }, 300);
+});
+
+
+document.addEventListener("click", event => {
+    const button = event.target.closest(".market-category-btn");
+    if (!button) return;
+
+    selectedMarketCategory = button.dataset.category || "All";
+
+    document.querySelectorAll(".market-category-btn").forEach(item => {
+        item.classList.toggle("active", item === button);
+    });
+
+    renderMarketTicker();
+});
+
 loadMarketTicker();
+
 
 let performanceChart = null;
 
@@ -847,3 +1022,73 @@ document.querySelectorAll(".period-btn").forEach(button => {
 });
 
 loadPerformanceChart("1M");
+
+
+const addedMarketSymbols = new Set();
+
+document.addEventListener("click", async event => {
+    const option = event.target.closest(".market-search-option");
+    const dropdown = document.getElementById("marketSearchDropdown");
+    const searchInput = document.getElementById("marketTickerSearch");
+
+    // Close the dropdown when clicking outside the search area.
+    if (!option) {
+        if (
+            dropdown &&
+            !event.target.closest(".market-ticker-search-wrapper")
+        ) {
+            dropdown.hidden = true;
+        }
+        return;
+    }
+
+    const symbol = option.dataset.symbol;
+    const name = option.dataset.name;
+
+    if (!symbol) return;
+
+    if (addedMarketSymbols.has(symbol)) {
+        dropdown.hidden = true;
+        if (searchInput) searchInput.value = "";
+        renderMarketTicker();
+        return;
+    }
+
+    option.disabled = true;
+    option.querySelector(".market-search-option-name").textContent =
+        "Fetching price...";
+
+    try {
+        const response = await fetch(
+            `/api/market-price/${encodeURIComponent(symbol)}`
+        );
+        const stock = await response.json();
+
+        if (!response.ok) {
+            throw new Error(stock.error || "Price unavailable");
+        }
+
+        stock.name = stock.name || name;
+        stock.category = stock.category || "NSE Stocks";
+
+        marketStocks.push(stock);
+        addedMarketSymbols.add(symbol);
+
+        selectedMarketCategory = "All";
+        renderMarketCategories();
+
+        if (searchInput) searchInput.value = "";
+        if (dropdown) {
+            dropdown.hidden = true;
+            dropdown.innerHTML = "";
+        }
+
+        renderMarketTicker();
+
+    } catch (error) {
+        console.error("Could not add stock:", error);
+        option.disabled = false;
+        option.querySelector(".market-search-option-name").textContent =
+            "Price unavailable. Try again.";
+    }
+});
