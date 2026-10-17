@@ -64,6 +64,8 @@
         <button id="refresh-portfolio" class="btn btn-primary">
             ↻ Refresh prices
         </button>
+        
+
     </div>
 </div>
 
@@ -73,6 +75,78 @@
         </p>
 
         <p id="holdings-count" class="portfolio-message"></p>
+
+        
+<section class="charts-section">
+    <div class="charts-heading">
+        <p class="portfolio-eyebrow">PORTFOLIO INSIGHTS</p>
+        <h2>Your money, visualised.</h2>
+        <p>Understand your investment allocation and performance at a glance.</p>
+    </div>
+
+    <div class="charts-grid">
+        <article class="chart-card">
+            <div class="chart-card-heading">
+                <h3>Investment breakdown</h3>
+                <p>Amount invested in each stock</p>
+            </div>
+            <div class="chart-container">
+                <canvas id="investment-chart"></canvas>
+            </div>
+        </article>
+
+        <article class="chart-card">
+            <div class="chart-card-heading">
+                <h3>Profit &amp; loss</h3>
+                <p>Performance by stock</p>
+            </div>
+            <div class="chart-container">
+                <canvas id="profit-loss-chart"></canvas>
+            </div>
+        </article>
+    </div>
+</section>
+
+
+<section class="risk-section" id="risk-section">
+    <div class="risk-heading">
+        <div>
+            <p class="portfolio-eyebrow">PORTFOLIO MONITORING</p>
+            <h2>Risk rate alerts.</h2>
+            <p>Keep an eye on unusual changes across your holdings.</p>
+        </div>
+        <span class="risk-indicator">PORTFOLIO CHECKS</span>
+    </div>
+
+    <div class="risk-grid" id="risk-grid">
+        <article class="risk-card">
+            <span class="risk-icon">↗</span>
+            <div>
+                <p>Portfolio concentration</p>
+                <h3 id="risk-concentration">Calculating...</h3>
+                <span>Largest share of invested capital</span>
+            </div>
+        </article>
+
+        <article class="risk-card">
+            <span class="risk-icon">!</span>
+            <div>
+                <p>Holdings at a loss</p>
+                <h3 id="risk-loss-count">Calculating...</h3>
+                <span>Based on available prices</span>
+            </div>
+        </article>
+
+        <article class="risk-card">
+            <span class="risk-icon">◷</span>
+            <div>
+                <p>Price data freshness</p>
+                <h3 id="risk-stale-count">Calculating...</h3>
+                <span>Holdings needing a price check</span>
+            </div>
+        </article>
+    </div>
+</section>
 
 <div class="holdings-grid" id="holdings-grid"></div>
 
@@ -99,7 +173,7 @@
         </p>
     </div>
 </footer>
-
-    <script src="{{ url_for('static', filename='portfolio.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='portfolio.js') }}"></script>
 </body>
 </html>

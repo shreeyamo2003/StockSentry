@@ -276,8 +276,8 @@ body {
     height: 48px;
     place-items: center;
     border-radius: 15px;
-    background: var(--burgundy);
-    color: var(--cream-light);
+    background: var(--cream-light);
+    color: var(--burgundy-soft);
     font-size: 0.9rem;
     font-weight: 800;
 }
@@ -456,9 +456,9 @@ body {
 }
 
 .delete-holding:hover {
-    background: var(--burgundy);
-    border-color: var(--burgundy);
-    color: var(--cream-light);
+    background: var(--cream-light);
+    border-color: var(--cream-deep);
+    color: var(--burgundy-soft);
 }
 
 /* Empty state */
@@ -1180,4 +1180,292 @@ body {
     background: var(--burgundy);
     color: var(--cream-light);
     border: 1px solid var(--wine-900);
+}
+
+
+/* =====================================
+   STOCKSENTRY — PORTFOLIO CHARTS
+   ===================================== */
+
+.charts-section {
+    margin: 34px 0 38px;
+    padding: 28px;
+    background: var(--cream-light);
+    border: 1px solid rgba(94, 20, 36, 0.12);
+    border-radius: 20px;
+    box-shadow: 0 6px 24px rgba(46, 9, 20, 0.04);
+}
+
+.charts-heading {
+    margin-bottom: 24px;
+}
+
+.charts-heading h2 {
+    margin: 6px 0 8px;
+    color: var(--burgundy);
+    font-size: clamp(24px, 2.5vw, 31px);
+    letter-spacing: -0.7px;
+}
+
+.charts-heading > p:last-child {
+    color: var(--text-muted, #74666A);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    align-items: stretch;
+}
+
+.chart-card {
+    min-width: 0;
+    padding: 22px;
+    background: #FFFCF7;
+    border: 1px solid rgba(94, 20, 36, 0.12);
+    border-radius: 16px;
+    box-shadow: 0 3px 12px rgba(46, 9, 20, 0.035);
+    transition: box-shadow 180ms ease, transform 180ms ease;
+}
+
+.chart-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(46, 9, 20, 0.07);
+}
+
+.chart-card-heading {
+    margin-bottom: 18px;
+}
+
+.chart-card-heading h3 {
+    margin: 0 0 6px;
+    color: var(--burgundy);
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.chart-card-heading p {
+    margin: 0;
+    color: #786B6D;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.chart-container {
+    position: relative;
+    width: 100%;
+    height: 300px;
+}
+
+.chart-container canvas {
+    display: block;
+    max-width: 100%;
+}
+
+@media (max-width: 760px) {
+    .charts-section {
+        margin: 26px 0 30px;
+        padding: 20px;
+    }
+
+    .charts-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 15px;
+    }
+
+    .chart-card {
+        padding: 17px;
+    }
+
+    .chart-container {
+        height: 270px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .chart-card {
+        transition: none;
+    }
+
+    .chart-card:hover {
+        transform: none;
+    }
+}
+
+/* =====================================
+   STOCKSENTRY — RISK MONITORING
+   ===================================== */
+
+.risk-section {
+    margin: 0 0 40px;
+    padding: 26px;
+    background: #FFFCF7;
+    border: 1px solid rgba(94, 20, 36, 0.13);
+    border-radius: 20px;
+    box-shadow: 0 5px 20px rgba(46, 9, 20, 0.035);
+}
+
+.risk-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 18px;
+    margin-bottom: 22px;
+}
+
+.risk-heading h2 {
+    margin: 6px 0 7px;
+    color: var(--burgundy);
+    font-size: clamp(23px, 2.4vw, 29px);
+    letter-spacing: -0.6px;
+}
+
+.risk-heading > div > p:last-child {
+    margin: 0;
+    color: #786B6D;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.risk-indicator {
+    padding: 8px 11px;
+    border-radius: 8px;
+    background: rgba(36, 73, 166, 0.08);
+    color: var(--royal);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.7px;
+    white-space: nowrap;
+}
+
+.risk-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 15px;
+}
+
+.risk-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 13px;
+    min-width: 0;
+    padding: 19px 16px;
+    background: var(--cream-light);
+    border: 1px solid rgba(94, 20, 36, 0.10);
+    border-radius: 13px;
+}
+
+.risk-icon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: rgba(100, 30, 50, 0.08);
+    color: var(--burgundy);
+    font-size: 19px;
+    font-weight: 700;
+}
+
+.risk-card p {
+    margin: 0 0 7px;
+    color: #786B6D;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.risk-card h3 {
+    margin: 0 0 6px;
+    color: var(--burgundy);
+    font-size: 21px;
+    overflow-wrap: anywhere;
+}
+
+.risk-card div > span {
+    color: #786B6D;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+@media (max-width: 760px) {
+    .risk-section {
+        padding: 19px;
+    }
+
+    .risk-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 10px;
+    }
+
+    .risk-heading {
+        flex-direction: column;
+    }
+}
+
+/* Risk alert states */
+.risk-card.risk-warning {
+    border-color: rgba(190, 120, 35, 0.45);
+    background: #FFF6E8;
+}
+
+.risk-card.risk-warning .risk-icon {
+    background: rgba(190, 120, 35, 0.14);
+    color: #9A5B12;
+}
+
+.risk-card.risk-warning h3 {
+    color: #9A5B12;
+}
+
+.risk-card.risk-good {
+    border-color: rgba(36, 73, 166, 0.20);
+}
+
+.risk-card.risk-good .risk-icon {
+    background: rgba(36, 73, 166, 0.09);
+    color: var(--royal);
+}
+
+.risk-card.risk-neutral {
+    border-color: rgba(94, 20, 36, 0.12);
+}
+
+.target-alert-badge {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    margin-bottom: 12px;
+    padding: 6px 10px;
+    border-radius: 7px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+}
+
+.target-alert-badge.approaching {
+    background: #FFF0D9;
+    color: #925510;
+}
+
+.target-alert-badge.reached {
+    background: #E7F3EA;
+    color: #24683B;
+}
+
+.target-alert-badge.above {
+    background: #F9E6E9;
+    color: #8E263B;
+}
+
+.target-alert-badge.outside {
+    background: #EAF0FC;
+    color: #2449A6;
+}
+
+.target-alert-badge.unavailable {
+    background: #EEE9E8;
+    color: #62585A;
 }

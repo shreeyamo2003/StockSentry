@@ -12,23 +12,32 @@
 </head>
 <body>
 
-  <!-- NAV -->
-  <header class="nav">
-    <a class="brand" href="#top" aria-label="StockSentry home">
-      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
-        <rect x="2" y="11" width="28" height="10" rx="2" class="bm-band"/>
-        <path d="M2 24 L11 16 L17 20 L30 6" class="bm-line"/>
-      </svg>
-      <span>StockSentry</span>
-    </a>
-    <nav class="nav-links" aria-label="Primary">
-      <a href="/analyze">My Portfolio</a>
-      <a href="#about">About</a>
-      <a href="#uses">What it does</a>
-      <a href="#how">How it works</a>
-      <button class="btn btn-small" data-open-modal>Track a stock</button>
-    </nav>
-  </header>
+<!-- NAV -->
+<header class="nav">
+  <a class="brand" href="#top" aria-label="StockSentry home">
+    <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+      <rect x="2" y="11" width="28" height="10" rx="2" class="bm-band"/>
+      <path d="M2 24 L11 16 L17 20 L30 6" class="bm-line"/>
+    </svg>
+    <span>StockSentry</span>
+  </a>
+
+  <button class="menu-toggle" id="menuToggle"
+          aria-label="Open navigation menu"
+          aria-expanded="false"
+          aria-controls="navLinks">
+    ☰
+  </button>
+
+  <nav class="nav-links" id="navLinks" aria-label="Primary">
+    <a href="/analyze">My Portfolio</a>
+    <a href="#about">About</a>
+    <a href="#uses">What it does</a>
+    <a href="#how">How it works</a>
+    <button class="btn btn-small" data-open-modal>Track a stock</button>
+  </nav>
+</header>
+
 
   <main id="top">
 
@@ -290,5 +299,33 @@
 
   <script src="{{ url_for('static', filename='script.js') }}"></script>
   <script src="{{ url_for('static', filename='portfolio.js') }}"></script>
+  
+<script>
+  const menuToggle = document.getElementById("menuToggle");
+  const navLinks = document.getElementById("navLinks");
+
+  menuToggle.addEventListener("click", function () {
+    const isOpen = navLinks.classList.toggle("open");
+
+    menuToggle.setAttribute("aria-expanded", isOpen);
+    menuToggle.setAttribute(
+      "aria-label",
+      isOpen ? "Close navigation menu" : "Open navigation menu"
+    );
+
+    menuToggle.textContent = isOpen ? "✕" : "☰";
+  });
+
+  navLinks.querySelectorAll("a").forEach(link => {
+    link.addEventListener("click", () => {
+      navLinks.classList.remove("open");
+      menuToggle.setAttribute("aria-expanded", "false");
+      menuToggle.setAttribute("aria-label", "Open navigation menu");
+      menuToggle.textContent = "☰";
+    });
+  });
+</script>
+</body>
+
 </body>
 </html>

@@ -11,7 +11,7 @@
 # if __name__ == "__main__":
 #     # use_reloader=False keeps the scheduler from starting twice later on
 #     app.run(host="127.0.0.1", port=5000, debug=True, use_reloader=False)
-
+import yfinance as yf
 from monitor import refresh_all_prices
 from calculations import (
     calculate_invested_value,
@@ -245,6 +245,11 @@ def portfolio_summary():
                 round(return_percentage, 2)
                 if return_percentage is not None else None
             ),
+            "target_status": (
+            __import__("monitor").check_target_status(stock, float(current_price))
+            if current_price is not None
+            else "PRICE_UNAVAILABLE"
+),
         })
 
         holdings.append(stock)
